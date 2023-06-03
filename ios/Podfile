@@ -1,3 +1,4 @@
+$RNFirebaseAsStaticFramework = true
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
@@ -13,7 +14,7 @@ prepare_react_native_project!
 #   dependencies: {
 #     ...(process.env.NO_FLIPPER ? { 'react-native-flipper': { platforms: { ios: null } } } : {}),
 # ```
-flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : FlipperConfiguration.enabled
+#flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : FlipperConfiguration.enabled
 
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
@@ -22,6 +23,8 @@ if linkage != nil
 end
 
 target 'authApp' do
+  use_frameworks! :linkage => :static
+  
   config = use_native_modules!
 
   # Flags change depending on the env values.
@@ -38,10 +41,13 @@ target 'authApp' do
     #
     # Note that if you have use_frameworks! enabled, Flipper will not work and
     # you should disable the next line.
-    :flipper_configuration => flipper_config,
+    #:flipper_configuration => FlipperConfiguration.enabled,
+
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
+
+  
 
   target 'authAppTests' do
     inherit! :complete
